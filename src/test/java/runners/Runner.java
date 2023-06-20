@@ -8,8 +8,12 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = "steps",
-        tags = ""
-//        dryRun = true // to check if I have feature without steps
+        tags = "@Etsy",
+        dryRun = false,
+        monochrome = false,
+        plugin = {"pretty",
+                "html:target/cucumber-reports/Cucumber.html",
+                "json:target/cucumber-reports/Cucumber.json"}
 )
 public class Runner {
 }

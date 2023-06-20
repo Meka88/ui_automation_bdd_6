@@ -1,13 +1,17 @@
 package steps;
 
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import pages.WikiPage;
 import utils.Driver;
+
+import java.util.List;
 
 public class WikiSteps {
 
@@ -39,5 +43,13 @@ public class WikiSteps {
         Assert.assertEquals(header, wikiPage.header.getText());
     }
 
+    @Then("user should see below languages around the logo")
+    public void user_should_see_below_languages_around_the_logo(DataTable dataTable) {
 
+        List<String> expectedText = dataTable.asList();
+
+        for (int i = 0; i < expectedText.size(); i++) {
+            Assert.assertEquals(expectedText.get(i), wikiPage.mainLanguages.get(i).getText());
+        }
+    }
 }

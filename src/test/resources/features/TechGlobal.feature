@@ -1,12 +1,10 @@
-@Regression
-
 Feature: TechGlobal Training Functionalities
 
   Background:
     Given user navigates to "https://techglobal-training.com/frontend"
 
 
-  @Login
+  @Login @Smoke
   Scenario Outline: Validate Login Form
     And user selects the "Login Form" option
     Then user should see "Login Form" heading
@@ -14,13 +12,13 @@ Feature: TechGlobal Training Functionalities
     Then user should see a "<message>" message
 
     Examples:
-      | username   | password | message                   |
-      | johndoe    | 123456   | Invalid Username entered! |
-      | tomsmith   | 12345    | Invalid Username entered! |
-      | TechGlobal | Test1234 | You are logged in         |
+      | username   | password | message                    |
+      | johndoe    | 123456   | Invalid Username entered!! |
+      | tomsmith   | 12345    | Invalid Username entered!  |
+      | TechGlobal | Test1234 | You are logged in          |
 
 
-  @Popup
+  @Popup @Regression
   Scenario: Validate dynamic tables pop-up window
     And user selects the "Dynamic Tables" option
     Then user should see the "Dynamic Tables" heading
