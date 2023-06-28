@@ -36,4 +36,5 @@ public class BaseSteps {
     public void userShouldSeeInTheTitle(String key) {
         Assert.assertTrue(driver.getTitle().contains(key));
     }
+
 }

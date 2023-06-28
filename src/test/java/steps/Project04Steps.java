@@ -3,184 +3,179 @@ package steps;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriver;
-import pages.Project4Pages;
+import org.openqa.selenium.WebElement;
+import pages.Project4Page;
 import utils.Driver;
+import utils.TableHandler;
 
 import java.util.List;
 
 public class Project04Steps {
     WebDriver driver;
-    Project4Pages project4Pages;
+    Project4Page project4Page;
+    //Project05Page project05Page;
 
     @Before
-    public void setDriver() {
+    public void setDriver(){
         driver = Driver.getDriver();
-        project4Pages = new Project4Pages();
+        project4Page = new Project4Page();
     }
-
-    @Given("the user is on {string}")
-    public void theUserIsOn(String url) {
-        driver.get(url);
-    }
-
-
 
     @Then("the user should see the {string} heading")
-    public void the_user_should_see_the_heading(String str) {
-        Assert.assertTrue(project4Pages.header.isDisplayed());
-        Assert.assertEquals(project4Pages.header.getText(),str);
+    public void theUserShouldSeeTheHeading(String headingText) {
+        switch (headingText){
+            case "Inventory":
+                Assert.assertTrue(headingText, project4Page.mainHeading.isDisplayed());
+                Assert.assertEquals(headingText, project4Page.mainHeading.getText());
+                break;
+//            case "Pagination":
+//                Assert.assertTrue(project05Page.mainHeading.isDisplayed());
+//                Assert.assertEquals(headingText, project05Page.mainHeading.getText());
+//                break;
+//            case "World City Populations 2022":
+//                Assert.assertTrue(project05Page.subHeading.isDisplayed());
+//                Assert.assertEquals(headingText, project05Page.subHeading.getText());
+//                break;
+            default:
+        }
+
     }
+
 
     @And("the user should see the table with the headers below")
-    public void the_user_should_see_the_table_with_the_headers_below(DataTable dataTable) {
-        List<String> expectedResult = dataTable.asList();
-        for (int i = 0; i < expectedResult.size(); i++) {
-            Assert.assertTrue(project4Pages.tableHeaders.get(i).isDisplayed());
-            Assert.assertEquals(project4Pages.tableHeaders.get(i).getText(), expectedResult.get(i));
-        }
+    public void theUserShouldSeeTheTableWithTheHeadersBelow(DataTable dataTable) {
+        List<String> headerText = dataTable.asList();
 
+        for (int i = 0; i < headerText.size(); i++) {
+            Assert.assertEquals(headerText.get(i), project4Page.modalHeading.get(i).getText());
+        }
     }
 
-    @Then("the user should see the table with the rows below")
-    public void the_user_should_see_the_table_with_the_rows_below(DataTable dataTable) {
-        List<List<String>> expectedResult = dataTable.asLists();
-        int index = 0;
-        for (int i = 0; i < expectedResult.size(); i++) {
-            for (int j = 0; j < expectedResult.get(i).size(); j++) {
-                Assert.assertTrue(project4Pages.tableRows.get(i).isDisplayed()); // iPhone
-                Assert.assertEquals(project4Pages.tableRows.get(i).getText(), expectedResult.get(i).get(j)); // 1
+
+    @And("the user should see the table with the rows below")
+    public void theUserShouldSeeTheTableWithTheRowsBelow(DataTable dataTable) {
+        List<List<String>> expectedTable = dataTable.asLists();
+        List<List<WebElement>> actualTable = TableHandler.getTableData(project4Page.table);
+
+        for (int i = 0; i < expectedTable.size(); i++) {
+            for (int j = 0; j < expectedTable.get(i).size(); j++) {
+                Assert.assertEquals(expectedTable.get(i).get(j), actualTable.get(i).get(j).getText());
             }
         }
-
     }
 
     @Then("the user should see the {string} button is enabled")
-    public void the_user_should_see_the_button_is_enabled(String btn) {
-        switch (btn){
+    public void the_user_should_see_the_button_is_enabled(String button) {
+        switch (button){
             case "ADD PRODUCT":
-                Assert.assertTrue(project4Pages.addProductBtn.isEnabled());
+                Assert.assertTrue(project4Page.addProductButton.isEnabled());
                 break;
             case "X":
+                Assert.assertTrue(project4Page.closeButton.isEnabled());
                 break;
             case "SUBMIT":
+                Assert.assertTrue(project4Page.submitButton.isEnabled());
                 break;
             default:
-                throw new NotFoundException("Not Found given element");
         }
-
     }
 
     @Then("the user should see the {string} text displayed")
-    public void the_user_should_see_the_text_displayed(String str) {
-        Assert.assertTrue(project4Pages.total.isDisplayed());
-        Assert.assertEquals(project4Pages.total.getText(),str);
-    }
-
-
-    @Then("the user should see the {string} modal with its heading")
-    public void the_user_should_see_the_modal_with_its_heading(String string) {
-        Assert.assertTrue(project4Pages.addProductHeading.isDisplayed());
-        Assert.assertEquals(project4Pages.addProductHeading.getText(),string);
-
-    }
-
-    @Then("the user should see the {string} label")
-    public void the_user_should_see_the_label(String str) {
-        switch (str){
-            case "Please select the quantity":
-                Assert.assertTrue(project4Pages.product_quantity.isDisplayed());
-                Assert.assertEquals(project4Pages.product_quantity.getText(),str);
-                break;
-            case "Please enter the name of the product":
-                Assert.assertTrue(project4Pages.product_name.isDisplayed());
-                Assert.assertEquals(project4Pages.product_name.getText(),str);
-                break;
-            case "Please enter the price of the product":
-                Assert.assertTrue(project4Pages.product_price.isDisplayed());
-                Assert.assertEquals(project4Pages.product_price.getText(),str);
-                break;
-            default:
-                throw new NotFoundException("bla bla bla");
-
-        }
-    }
-
-    @Then("the user should see the {string} input box is enabled")
-    public void the_user_should_see_the_input_box_is_enabled(String str) {
-        switch (str) {
-            case "Quantity":
-                Assert.assertTrue(project4Pages.quantityInput.isEnabled());
-                break;
-            case "Product":
-                Assert.assertTrue(project4Pages.productInput.isEnabled());
-                break;
-            case "Price":
-                Assert.assertTrue(project4Pages.priceInput.isEnabled());
-                break;
-            default:
-                throw new NotFoundException("bla bla bla");
-
-        }
+    public void the_user_should_see_the_text_displayed(String total) {
+        Assert.assertEquals(total, project4Page.totalAmount.getText());
     }
 
     @When("the user clicks on the {string} button")
-    public void the_user_clicks_on_the_button(String string) {
-        switch (string){
+    public void theUserClicksOnTheButton(String button) {
+        switch (button){
             case "ADD PRODUCT":
-                project4Pages.addProductBtn.click();
+                project4Page.addProductButton.click();
                 break;
             case "X":
-                project4Pages.deleteButton.click();
+                project4Page.closeButton.click();
                 break;
             case "SUBMIT":
-                project4Pages.submitBTN.click();
+                project4Page.submitButton.click();
                 break;
             default:
-                throw new NotFoundException("Not Found given element");
         }
     }
 
-    @Then("the user should not see the {string} modal")
-    public void the_user_should_not_see_the_modal(String str) {
+    @Then("the user should see the {string} modal with its heading")
+    public void theUserShouldSeeTheModalWithItsHeading(String headingText) {
+        Assert.assertEquals(headingText, project4Page.modalCardTitle.getText());
+    }
+
+    @And("the user should see the {string} label")
+    public void theUserShouldSeeTheLabel(String label) {
+        switch (label){
+            case "Please select the quantity":
+                Assert.assertTrue(project4Page.inputLabels.get(0).isDisplayed());
+                break;
+            case "Please enter the name of the product":
+                Assert.assertTrue(project4Page.inputLabels.get(1).isDisplayed());
+                break;
+            case "Please enter the price of the product":
+                Assert.assertTrue(project4Page.inputLabels.get(2).isDisplayed());
+                break;
+            default:
+        }
+    }
+
+    @And("the user should see the {string} input box is enabled")
+    public void theUserShouldSeeTheInputBoxIsEnabled(String inputBox) {
+        switch (inputBox) {
+            case "Quantity":
+                Assert.assertTrue(project4Page.inputBox.get(0).isEnabled());
+                break;
+            case "Product":
+                Assert.assertTrue(project4Page.inputBox.get(1).isEnabled());
+                break;
+            case "Price":
+                Assert.assertTrue(project4Page.inputBox.get(2).isEnabled());
+                break;
+            default:
+        }
+    }
+
+    @Then("the user should not see the Add New Product modal")
+    public void theUserShouldNotSeeTheModal() {
         try {
-            Assert.assertFalse(project4Pages.modalPageExists.isDisplayed());
-        } catch (NoSuchElementException e){
+            Assert.assertFalse(project4Page.modalCardTitle.isDisplayed());
+        }
+        catch (NoSuchElementException e){
             Assert.assertTrue(true);
         }
     }
 
-    @When("the user enters the quantity as {string}")
-    public void the_user_enters_the_quantity_as(String string) {
-        project4Pages.quantityInput.sendKeys(string);
-    }
-
-    @When("the user enters the product as {string}")
-    public void the_user_enters_the_product_as(String str) {
-        project4Pages.productInput.sendKeys(str);
-
-    }
-
-    @When("the user enters the price as {string}")
-    public void the_user_enters_the_price_as(String str) {
-        project4Pages.priceInput.sendKeys(str);
-
-    }
-
-    @Then("the user should see the table with the new row below")
-    public void the_user_should_see_the_table_with_the_new_row_below(DataTable dataTable) {
-        List<String> expectedResult = dataTable.asList();
-        for (int i = 0; i < expectedResult.size(); i++) {
-            Assert.assertTrue(project4Pages.newRow.get(i).isDisplayed());
-            Assert.assertEquals(project4Pages.newRow.get(i).getText(), expectedResult.get(i));
+    @And("the user enters the {string} as {string}")
+    public void theUserEntersTheAs(String details, String input) {
+        switch (details){
+            case "Quantity":
+                project4Page.inputBox.get(0).sendKeys(input);
+                break;
+            case "Product":
+                project4Page.inputBox.get(1).sendKeys(input);
+                break;
+            case"Price":
+                project4Page.inputBox.get(2).sendKeys(input);
+                break;
+            default:
         }
     }
 
+    @Then("the user should see the table with the new row below")
+    public void theUserShouldSeeTheTableWithTheNewRowBelow(DataTable dataTable) {
+        List<String> expectedRow = dataTable.asList();
+
+        for (int i = 0; i < expectedRow.size(); i++) {
+            Assert.assertEquals(expectedRow.get(i), TableHandler.getTableRow(4).get(i).getText());
+        }
+    }
 
 }

@@ -1,10 +1,10 @@
-Feature: Project 4
+@Project04
+Feature: Project04 automation
 
   Background:
-    Given the user is on "https://techglobal-training.com/frontend/project-4"
+    Given user navigates to "https://techglobal-training.com/frontend/project-4"
 
-  @InventoryTable
-  Scenario: 1 - Validate the default content of the inventory table
+  Scenario: Test Case 01 - Validate the default content of the inventory table
     Then the user should see the "Inventory" heading
     And the user should see the table with the headers below
       | Quantity |
@@ -12,24 +12,14 @@ Feature: Project 4
       | Price $  |
       | Total $  |
     And the user should see the table with the rows below
-      | 1 |
-      | iPhone  |
-      | 1,000   |
-      | 1,000 |
-      | 3 |
-      | Airpods |
-      | 100     |
-      | 300   |
-      | 2     |
-      | iPad    |
-      | 500     |
-      | 1,000 |
-    And the user should see the "btn" button is enabled
-    And the user should see the "total" text displayed
+      | 1 | iPhone  | 1,000 | 1,000 |
+      | 3 | Airpods | 100   | 300   |
+      | 2 | iPad    | 500   | 1,000 |
+    And the user should see the "ADD PRODUCT" button is enabled
+    And the user should see the "Total = $2,300" text displayed
 
 
-  @addNewProduct
-  Scenario: 02 - Validate the Add New Product modal
+  Scenario: Test Case 02 - Validate the Add New Product modal
     When the user clicks on the "ADD PRODUCT" button
     Then the user should see the "Add New Product" modal with its heading
     And the user should see the "X" button is enabled
@@ -41,23 +31,22 @@ Feature: Project 4
     And the user should see the "Price" input box is enabled
     And the user should see the "SUBMIT" button is enabled
 
-  @xButton
-  Scenario: 03 - Validate the Add New Product modal X button
+  Scenario: Test Case 03 - Validate the Add New Product modal X button
     When the user clicks on the "ADD PRODUCT" button
     Then the user should see the "Add New Product" modal with its heading
     When the user clicks on the "X" button
-    Then the user should not see the "Add New Product" modal
+    Then the user should not see the Add New Product modal
 
-  @newProductAdded
-  Scenario: 04 - Validate the new product added
+
+  Scenario: Test Case 04 - Validate the new product added
     When the user clicks on the "ADD PRODUCT" button
-    And the user enters the quantity as "2"
-    And the user enters the product as "Mouse"
-    And the user enters the price as "100"
+    And the user enters the "Quantity" as "2"
+    And the user enters the "Product" as "Mouse"
+    And the user enters the "Price" as "100"
     And the user clicks on the "SUBMIT" button
     Then the user should see the table with the new row below
-      | 2 |
+      | 2     |
       | Mouse |
-      | 100 |
-      | 200 |
+      | 100   |
+      | 200   |
     And the user should see the "Total = $2,500" text displayed
